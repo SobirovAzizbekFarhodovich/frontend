@@ -7,8 +7,12 @@ const searchPasswordsBtn = document.getElementById("searchPasswords");
 const formContainer = document.getElementById("formContainer");
 const passwordsContainer = document.getElementById("passwordsContainer");
 
-const BASE_URL = "http://3.79.247.241:8080/api";
+const BASE_URL = "https://password-manager.eslab.uz/api";
 const userID = new URLSearchParams(window.location.search).get("user_id");
+
+if (!userID) {
+    alert("Foydalanuvchi ID'si aniqlanmadi!");
+}
 
 savePasswordBtn.addEventListener("click", () => {
     formContainer.innerHTML = `
@@ -25,7 +29,7 @@ savePasswordBtn.addEventListener("click", () => {
         const password = document.getElementById("password").value;
 
         try {
-            const response = await fetch(`${BASE_URL}/post_password`, {
+            const response = await fetch(`${BASE_URL}/password/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_id: userID, site, password }),
@@ -64,7 +68,7 @@ searchPasswordsBtn.addEventListener("click", () => {
         const site = document.getElementById("searchSite").value;
 
         try {
-            const response = await fetch(`${BASE_URL}/password?userID=${userID}&site=${site}`);
+            const response = await fetch(`${BASE_URL}/password?name=${site}`);
             const result = await response.json();
             passwordsContainer.innerHTML = `<h3>Qidiruv natijalari</h3>`;
             result.data.forEach(password => {
